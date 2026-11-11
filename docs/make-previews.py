@@ -118,25 +118,31 @@ def build() -> None:
 
 
 def build_location() -> None:
-    """The composer status row, with a ring around where the chip lives."""
+    """The composer status row, with a spotlight on where the chip lives.
+
+    Dimming the surroundings reads better than a hand-drawn box: the chip keeps
+    its real colours and nothing appears misaligned at a glance.
+    """
     source, box, highlight = LOCATION
     shot = load(source).crop(box)
     shot = shot.resize((int(shot.width * 1.6), int(shot.height * 1.6)), Image.LANCZOS)
 
     pad = 18
-    canvas = Image.new("RGB", (shot.width + pad * 2, shot.height + pad * 2), (246, 248, 251))
-    canvas.paste(shot, (pad, pad))
+    base = Image.new("RGBA", (shot.width + pad * 2, shot.height + pad * 2), (246, 248, 251, 255))
+    base.paste(shot, (pad, pad))
 
     x0, y0, x1, y1 = (int(v * 1.6) for v in highlight)
-    draw = ImageDraw.Draw(canvas)
-    draw.rounded_rectangle(
-        [pad + x0 - 8, pad + y0 - 4, pad + x1 + 8, pad + y1 + 4],
-        radius=14,
-        outline=(63, 174, 114),
-        width=3,
-    )
-    canvas.save(DOCS / "location.png", optimize=True)
-    print("wrote", DOCS / "location.png", canvas.size)
+    hole = [pad + x0 - 7, pad + y0 - 5, pad + x1 + 7, pad + y1 + 5]
+
+    veil = Image.new("RGBA", base.size, (247, 249, 252, 185))
+    ImageDraw.Draw(veil).rounded_rectangle(hole, radius=15, fill=(0, 0, 0, 0))
+    out = Image.alpha_composite(base, veil)
+
+    # A hairline edge so the bright area still reads as a defined region.
+    ImageDraw.Draw(out).rounded_rectangle(hole, radius=15, outline=(63, 174, 114, 90), width=2)
+
+    out.convert("RGB").save(DOCS / "location.png", optimize=True)
+    print("wrote", DOCS / "location.png", out.size)
 
 
 if __name__ == "__main__":
