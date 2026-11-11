@@ -819,7 +819,6 @@ window.__ModuleLoader__.load({
                 onSetLang('zh');
               },
             }, '中'),
-            h('span', { className: 'dj-seg-div', 'aria-hidden': 'true' }),
             h('button', {
               type: 'button',
               className: 'dj-seg-btn' + (lang === 'en' ? ' dj-seg-btn--active' : ''),
@@ -1244,23 +1243,26 @@ window.__ModuleLoader__.load({
 .dj-link:hover { text-decoration: underline; }
 .dj-seg {
   display: inline-flex;
-  align-items: center;
-  padding: 2px;
+  align-items: stretch;
+  padding: 0;
   border: 1px solid var(--dsw-alias-border-l1);
   border-radius: 999px;
   background: transparent;
+  overflow: hidden;
 }
 .dj-seg-btn {
-  padding: 0 7px;
+  padding: 0 8px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 0;
   background: transparent;
   color: var(--dsw-alias-label-secondary);
   font: inherit;
   font-size: 10px;
-  line-height: 14px;
+  line-height: 16px;
   cursor: pointer;
 }
+.dj-seg-btn:first-child { border-radius: 999px 0 0 999px; }
+.dj-seg-btn:last-child { border-radius: 0 999px 999px 0; }
 .dj-seg-btn:hover { color: var(--dsw-alias-label-primary); }
 .dj-seg-btn--active {
   background: var(--dsw-alias-bg-layer-2);
@@ -1270,12 +1272,6 @@ window.__ModuleLoader__.load({
   .dj-seg-btn--active {
     background: color-mix(in srgb, var(--dsw-alias-brand-primary) 18%, var(--dsw-alias-bg-overlay));
   }
-}
-.dj-seg-div {
-  width: 1px;
-  height: 10px;
-  flex: none;
-  background: var(--dsw-alias-border-l2);
 }
 .dj-gh-link {
   display: inline-flex;
