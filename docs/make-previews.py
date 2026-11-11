@@ -21,6 +21,14 @@ SOURCES = {
     "en": Path(r"C:\Users\slren\.dsh\attachments\v1\objects\a5\a5f9bb45f5d52af4a3f35cb755c097546d4e9a421e2fb9cca0b14f60b539a968"),
 }
 
+# The composer status row, where the chip actually lives, with a highlight
+# rectangle around it: (source, crop box, highlight box inside the crop).
+LOCATION = (
+    Path(r"C:\Users\slren\.dsh\attachments\v1\objects\f2\f29951cb65a39367a939de77b68471de1100eb58bb756381b077c9169ee6e764"),
+    (6, 4, 757, 143),
+    (476, 114, 563, 140),
+)
+
 # Crop boxes inside each screenshot: (left, top, right, bottom).
 # Measured from the card border/shadow, so the composer behind is excluded.
 CROPS = {
@@ -105,6 +113,30 @@ def build() -> None:
     for key in panels:
         panels[key].save(DOCS / f"preview-{key}.png", optimize=True)
     print("wrote", DOCS / "preview.png", out.size)
+
+    build_location()
+
+
+def build_location() -> None:
+    """The composer status row, with a ring around where the chip lives."""
+    source, box, highlight = LOCATION
+    shot = load(source).crop(box)
+    shot = shot.resize((int(shot.width * 1.6), int(shot.height * 1.6)), Image.LANCZOS)
+
+    pad = 18
+    canvas = Image.new("RGB", (shot.width + pad * 2, shot.height + pad * 2), (246, 248, 251))
+    canvas.paste(shot, (pad, pad))
+
+    x0, y0, x1, y1 = (int(v * 1.6) for v in highlight)
+    draw = ImageDraw.Draw(canvas)
+    draw.rounded_rectangle(
+        [pad + x0 - 8, pad + y0 - 4, pad + x1 + 8, pad + y1 + 4],
+        radius=14,
+        outline=(63, 174, 114),
+        width=3,
+    )
+    canvas.save(DOCS / "location.png", optimize=True)
+    print("wrote", DOCS / "location.png", canvas.size)
 
 
 if __name__ == "__main__":

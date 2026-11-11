@@ -62,6 +62,12 @@ The countdown is still there — it just lives inside the popover, where you loo
 
 Every visible string is translated, including weekday names, relative dates, and the seven festivals.
 
+### Where it shows up
+
+Not a floating window. The chip lives in the composer's **status row** — the line under the input that already shows token counts, cache-hit rate and context usage:
+
+![Where the chip lives](docs/location.png)
+
 ## Install
 
 The plugin has no dependencies, no install scripts, and no build step, so any of these paths works. All three use the harness **Settings → Plugins** install box.
