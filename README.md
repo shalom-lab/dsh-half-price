@@ -1,12 +1,12 @@
-![DeepSeek Half Price](docs/banner.svg)
+<p align="center">
+  <img src="docs/banner.svg" alt="DeepSeek Half Price" width="100%">
+</p>
 
-# DeepSeek Half Price
+<h1 align="center">DeepSeek Half Price</h1>
 
-*English · [中文](README.zh.md)*
-
-A quiet chip in the composer status row that tells you whether DeepSeek is billing you at **peak or half price**. Hover it for the next switch, live prices, and Chinese holidays.
-
-![The popover in Chinese and English](docs/preview.png)
+<p align="center">
+  English · <a href="README.zh.md">中文</a>
+</p>
 
 <p align="center">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg">
@@ -14,24 +14,49 @@ A quiet chip in the composer status row that tells you whether DeepSeek is billi
   <img alt="No build step" src="https://img.shields.io/badge/build-none-brightgreen.svg">
 </p>
 
-## What you get
+<p align="center">
+  A quiet chip in the composer status row that tells you whether DeepSeek<br>
+  is billing at <strong>peak or half price</strong>. Hover it for the next switch,<br>
+  live prices, and Chinese holidays.
+</p>
 
-- **Static chip** — `● 空闲 五折` / `● Peak`. Changes only when the billing window changes; no countdown, no animation.
-- **Popover** — current window, next switch with countdown, live price table, holidays, sync, official links.
-- **10-minute warning** — `│ 09:00 涨价` appears just before the rate changes.
-- **Quiet by design** — one timer per boundary, one holiday sync per 30 days, no telemetry.
+<p align="center">
+  <img src="docs/preview.png" alt="The popover in Chinese and English" width="860">
+</p>
 
-![Where the chip lives](docs/location.png)
+---
+
+## Features
+
+| Feature | Detail |
+| --- | --- |
+| **Static chip** | `● 空闲 五折` / `● Peak`. Changes only when the billing window changes — no countdown, no animation. |
+| **Popover** | Current window, next switch with countdown, live price table, holidays, sync, official links. |
+| **10-minute warning** | `│ 09:00 涨价` appears on the chip just before the rate changes. |
+| **Quiet by design** | One timer per boundary, one holiday sync per 30 days, no telemetry. |
+
+<p align="center">
+  <img src="docs/location.png" alt="Where the chip lives in the composer status row" width="860">
+</p>
+
+<p align="center">
+  <sub>The chip sits in the composer status row, beside cache and context stats.</sub>
+</p>
 
 ## Install
 
-| Way | Paste into **Settings → Plugins** |
-| --- | --- |
-| GitHub (recommended) | `https://github.com/shalom-lab/dsh-half-price` |
-| Tarball | absolute path to a `pnpm pack` `.tgz` |
-| Local | absolute path to the checkout |
+Paste the GitHub URL into **Settings → Plugins**, then **restart the harness** — client modules are cached by id.
 
-Then **restart the harness** — client modules are cached by id. No dependencies, no build step, no install scripts.
+```
+https://github.com/shalom-lab/dsh-half-price
+```
+
+| Other ways | What to paste |
+| --- | --- |
+| Tarball | Absolute path to a `pnpm pack` `.tgz` |
+| Local checkout | Absolute path to the repo directory |
+
+No dependencies, no build step, no install scripts.
 
 Or hand it to an agent:
 
@@ -43,34 +68,36 @@ Use the plugin manager, confirm the dsh-half-price row is active, and tell me if
 ## Pricing rule
 
 | Window | Beijing time | Price |
-| --- | --- | --- |
-| Peak | Mon–Fri 09:00–12:00, 14:00–18:00, excluding holidays | Full |
-| Idle | everything else, including weekends and holidays | 50% |
+| --- | --- | :---: |
+| Peak | Mon–Fri 09:00–12:00 and 14:00–18:00, excluding holidays | Full |
+| Idle | Everything else, including weekends and holidays | 50% |
 
 Make-up workdays count as weekdays. The old `00:30–08:30` discount was retired in 2025.
 
-[中文价格页](https://api-docs.deepseek.com/zh-cn/quick_start/pricing) · [English pricing page](https://api-docs.deepseek.com/quick_start/pricing/)
+[Chinese pricing page](https://api-docs.deepseek.com/zh-cn/quick_start/pricing) · [English pricing page](https://api-docs.deepseek.com/quick_start/pricing/)
 
 ## Prices
 
-Per 1M tokens; English mode shows the USD list from the English docs.
+Per 1M tokens. English mode shows the USD list from the English docs.
 
 | Model | Window | Cached input | Miss input | Output |
-| --- | --- | --- | --- | --- |
-| `deepseek-flash` | idle | ¥0.02 | ¥1 | ¥4 |
-| | peak | ¥0.04 | ¥2 | ¥8 |
-| `deepseek-v4-pro` | idle | ¥0.15 | ¥4.5 | ¥13.5 |
-| | peak | ¥0.30 | ¥9 | ¥27 |
+| --- | --- | ---: | ---: | ---: |
+| `deepseek-flash` | Idle | ¥0.02 | ¥1 | ¥4 |
+| | Peak | ¥0.04 | ¥2 | ¥8 |
+| `deepseek-v4-pro` | Idle | ¥0.15 | ¥4.5 | ¥13.5 |
+| | Peak | ¥0.30 | ¥9 | ¥27 |
 
 ## Holidays
 
-- **Bundled**: 2026 and 2027, including 调休 workdays.
-- **Synced**: other years come from [holiday-cn](https://github.com/NateScarlet/holiday-cn) through four mirrors, cached for 30 days.
-- **Safe**: offline or all mirrors down, the bundled years still work.
+| | |
+| --- | --- |
+| **Bundled** | 2026 and 2027, including 调休 workdays. |
+| **Synced** | Other years come from [holiday-cn](https://github.com/NateScarlet/holiday-cn) through four mirrors, cached for 30 days. |
+| **Safe** | If you are offline or every mirror is down, the bundled years still work. |
 
-## Language · Privacy
+## Language and privacy
 
-Follows the harness language; the `中 | EN` switch overrides it for this plugin. English keeps the Chinese festival names — `Spring Festival 春节`.
+The plugin follows the harness language. The `中 | EN` switch overrides it for this plugin only. English mode keeps the Chinese festival names, e.g. `Spring Festival 春节`.
 
 No telemetry, no account access. The only outbound request is the holiday sync.
 
@@ -84,4 +111,4 @@ node dev/mirror-check.mjs     # fallback and total failure
 
 ## License
 
-[MIT](LICENSE).
+[MIT](LICENSE)
