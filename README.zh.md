@@ -45,24 +45,17 @@
 
 ## 安装
 
-把 GitHub 地址粘到 **设置 → 插件**，然后**重启 Harness**——客户端模块按 id 缓存。
-
-```
-https://github.com/shalom-lab/dsh-half-price
-```
-
-| 其他方式 | 粘贴内容 |
-| --- | --- |
-| tarball | `pnpm pack` 产出的 `.tgz` 绝对路径 |
-| 本地目录 | 仓库目录的绝对路径 |
-
-零依赖、免构建、无安装脚本。
-
-也可以直接交给 Agent：
+把这段交给 Agent：
 
 ```text
 把这个 DeepSeek Harness 插件装到我的环境里：https://github.com/shalom-lab/dsh-half-price
 请用插件管理器安装并启用，确认 dsh-half-price 这一行是 active，然后告诉我需不需要重启。
+```
+
+或者把 GitHub 地址粘到 **设置 → 插件**，然后**重启 Harness**——客户端模块按 id 缓存。
+
+```
+https://github.com/shalom-lab/dsh-half-price
 ```
 
 ## 计费规则

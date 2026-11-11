@@ -45,24 +45,17 @@
 
 ## Install
 
-Paste the GitHub URL into **Settings → Plugins**, then **restart the harness** — client modules are cached by id.
-
-```
-https://github.com/shalom-lab/dsh-half-price
-```
-
-| Other ways | What to paste |
-| --- | --- |
-| Tarball | Absolute path to a `pnpm pack` `.tgz` |
-| Local checkout | Absolute path to the repo directory |
-
-No dependencies, no build step, no install scripts.
-
-Or hand it to an agent:
+Hand this to an agent:
 
 ```text
 Install this DeepSeek Harness plugin for me: https://github.com/shalom-lab/dsh-half-price
 Use the plugin manager, confirm the dsh-half-price row is active, and tell me if a restart is needed.
+```
+
+Or paste the GitHub URL into **Settings → Plugins**, then **restart the harness** — client modules are cached by id.
+
+```
+https://github.com/shalom-lab/dsh-half-price
 ```
 
 ## Pricing rule
