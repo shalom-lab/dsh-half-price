@@ -757,10 +757,7 @@ window.__ModuleLoader__.load({
           : h('div', { className: 'dj-meta' }, t('holidayNone')),
         h('div', { className: 'dj-meta-row' },
           h('span', { className: 'dj-meta' }, t('holidayNote')),
-          h('button', { type: 'button', className: 'dj-link', onClick: onSync }, syncLabel)
-        ),
-        h('div', { className: 'dj-meta-row dj-meta-row--links' },
-          externalLink(USAGE_URL, t('usageLink'), 'usage'),
+          h('button', { type: 'button', className: 'dj-link', onClick: onSync }, syncLabel),
           externalLink(HOLIDAY_URL, t('holidayLink'), 'holiday')
         )
       );
@@ -822,6 +819,7 @@ window.__ModuleLoader__.load({
                 onSetLang('zh');
               },
             }, '中'),
+            h('span', { className: 'dj-seg-div', 'aria-hidden': 'true' }),
             h('button', {
               type: 'button',
               className: 'dj-seg-btn' + (lang === 'en' ? ' dj-seg-btn--active' : ''),
@@ -847,7 +845,8 @@ window.__ModuleLoader__.load({
           ),
           h('span', { className: 'dj-foot-gap' }),
           h('button', { type: 'button', className: 'dj-link', onClick: () => setShowMore((value) => !value) }, showMore ? t('less') : t('more')),
-          externalLink(pricingUrl(lang), t('priceLink'), 'price')
+          externalLink(pricingUrl(lang), t('priceLink'), 'price'),
+          externalLink(USAGE_URL, t('usageLink'), 'usage')
         )
       );
     }
@@ -1107,7 +1106,7 @@ window.__ModuleLoader__.load({
   transform: translateX(-50%);
   z-index: 40;
   box-sizing: border-box;
-  width: 310px;
+  width: 312px;
   max-width: calc(100vw - 40px);
   max-height: min(68vh, 440px);
   overflow: auto;
@@ -1225,7 +1224,7 @@ window.__ModuleLoader__.load({
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 2px 12px;
+  gap: 2px 8px;
   margin-top: 9px;
   padding-top: 7px;
   border-top: 1px solid var(--dsw-alias-border-l1);
@@ -1246,15 +1245,15 @@ window.__ModuleLoader__.load({
 .dj-seg {
   display: inline-flex;
   align-items: center;
-  padding: 0;
+  padding: 2px;
   border: 1px solid var(--dsw-alias-border-l1);
-  border-radius: 6px;
+  border-radius: 999px;
   background: transparent;
 }
 .dj-seg-btn {
-  padding: 0 6px;
+  padding: 0 7px;
   border: 0;
-  border-radius: 5px;
+  border-radius: 999px;
   background: transparent;
   color: var(--dsw-alias-label-secondary);
   font: inherit;
@@ -1264,8 +1263,19 @@ window.__ModuleLoader__.load({
 }
 .dj-seg-btn:hover { color: var(--dsw-alias-label-primary); }
 .dj-seg-btn--active {
-  color: var(--dsw-alias-brand-primary);
-  font-weight: 700;
+  background: var(--dsw-alias-bg-layer-2);
+  color: var(--dsw-alias-label-primary);
+}
+@supports (color: color-mix(in srgb, red 10%, white)) {
+  .dj-seg-btn--active {
+    background: color-mix(in srgb, var(--dsw-alias-brand-primary) 18%, var(--dsw-alias-bg-overlay));
+  }
+}
+.dj-seg-div {
+  width: 1px;
+  height: 10px;
+  flex: none;
+  background: var(--dsw-alias-border-l2);
 }
 .dj-gh-link {
   display: inline-flex;
@@ -1285,7 +1295,6 @@ window.__ModuleLoader__.load({
 .dj-ext--gh { display: inline-flex; align-items: center; gap: 4px; }
 .dj-gh { flex: none; display: block; }
 .dj-meta-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.dj-meta-row--links { margin-top: 5px; gap: 12px; }
 `;
 
     // Official pages. The docs split by language, so the price link follows the
