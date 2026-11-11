@@ -757,7 +757,10 @@ window.__ModuleLoader__.load({
           : h('div', { className: 'dj-meta' }, t('holidayNone')),
         h('div', { className: 'dj-meta-row' },
           h('span', { className: 'dj-meta' }, t('holidayNote')),
-          h('button', { type: 'button', className: 'dj-link', onClick: onSync }, syncLabel),
+          h('button', { type: 'button', className: 'dj-link', onClick: onSync }, syncLabel)
+        ),
+        h('div', { className: 'dj-meta-row dj-meta-row--links' },
+          externalLink(USAGE_URL, t('usageLink'), 'usage'),
           externalLink(HOLIDAY_URL, t('holidayLink'), 'holiday')
         )
       );
@@ -844,8 +847,7 @@ window.__ModuleLoader__.load({
           ),
           h('span', { className: 'dj-foot-gap' }),
           h('button', { type: 'button', className: 'dj-link', onClick: () => setShowMore((value) => !value) }, showMore ? t('less') : t('more')),
-          externalLink(pricingUrl(lang), t('priceLink'), 'price'),
-          externalLink(USAGE_URL, t('usageLink'), 'usage')
+          externalLink(pricingUrl(lang), t('priceLink'), 'price')
         )
       );
     }
@@ -1283,6 +1285,7 @@ window.__ModuleLoader__.load({
 .dj-ext--gh { display: inline-flex; align-items: center; gap: 4px; }
 .dj-gh { flex: none; display: block; }
 .dj-meta-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.dj-meta-row--links { margin-top: 5px; gap: 12px; }
 `;
 
     // Official pages. The docs split by language, so the price link follows the
