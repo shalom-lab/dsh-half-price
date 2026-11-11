@@ -26,7 +26,7 @@ SOURCES = {
 LOCATION = (
     Path(r"C:\Users\slren\.dsh\attachments\v1\objects\f2\f29951cb65a39367a939de77b68471de1100eb58bb756381b077c9169ee6e764"),
     (6, 4, 757, 143),
-    (476, 114, 563, 140),
+    (488, 112, 578, 137),
 )
 
 # Crop boxes inside each screenshot: (left, top, right, bottom).
