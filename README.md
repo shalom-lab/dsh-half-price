@@ -1,5 +1,7 @@
 # DeepSeek Half Price
 
+*English · [中文](README.zh.md)*
+
 A small, quiet [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that answers one question, all day long:
 
 > **Am I paying full price for DeepSeek right now, or half?**
@@ -73,6 +75,18 @@ The plugin has no dependencies, no install scripts, and no build step, so any of
 After installing, **restart the harness**. Client modules are cached by id, so a plain page refresh can keep serving the previous build.
 
 Then look at the composer: the chip sits in `conversation.composer.dock`, next to the activity and token-usage entries.
+
+### Or let an agent do it
+
+Paste this into a harness session that can run tools:
+
+```text
+Install this DeepSeek Harness plugin for me:
+https://github.com/shalom-lab/dsh-half-price
+
+Use the plugin manager to install and enable it, confirm the dsh-half-price row is
+active (not failed or disabled), and tell me whether the harness needs a restart.
+```
 
 ### Verify it is alive
 
@@ -181,6 +195,16 @@ The package is `dsh-half-price`, `private: false`, with `repository`, `homepage`
 Nothing in the code depends on the package name, so both can coexist.
 
 **Before announcing it**, re-capture both screenshots after the final style pass (`docs/make-previews.py` rebuilds the side-by-side figure from two source images). The Chinese capture in the current figure predates the latest switch styling, so the two panels differ slightly.
+
+### GitHub repo settings
+
+Copy these into **Settings → General → About** on the repository:
+
+| Field | Value |
+| --- | --- |
+| Description | `A quiet chip under the DeepSeek Harness composer: peak or half price at a glance, with the next switch, live CNY/USD prices, and Chinese holidays. Zero dependencies.` |
+| Website | leave empty (or point it at this README) |
+| Topics | `dsh` `dsh-plugin` `deepseek` `deepseek-harness` `pricing` `peak-hours` `off-peak` `half-price` `i18n` |
 
 ## License
 
