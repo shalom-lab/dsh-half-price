@@ -830,23 +830,22 @@ window.__ModuleLoader__.load({
               },
             }, 'EN')
           ),
-          h('span', { className: 'dj-foot-gap' }),
-          h('button', { type: 'button', className: 'dj-link', onClick: () => setShowMore((value) => !value) }, showMore ? t('less') : t('more')),
-          externalLink(pricingUrl(lang), t('priceLink'), 'price'),
-          externalLink(USAGE_URL, t('usageLink'), 'usage'),
           h('a', {
-            key: 'repo',
-            className: 'dj-ext dj-ext--gh',
+            className: 'dj-gh-link',
             href: GITHUB_URL,
             target: '_blank',
             rel: 'noopener noreferrer',
-            title: GITHUB_URL,
+            title: 'GitHub',
+            'aria-label': 'GitHub',
             onClick: (event) => event.stopPropagation(),
           },
-            h('svg', { className: 'dj-gh', viewBox: '0 0 16 16', width: 12, height: 12, 'aria-hidden': 'true' },
-              h('path', { d: GITHUB_MARK, fill: 'currentColor' })),
-            'GitHub'
-          )
+            h('svg', { className: 'dj-gh', viewBox: '0 0 16 16', width: 13, height: 13, 'aria-hidden': 'true' },
+              h('path', { d: GITHUB_MARK, fill: 'currentColor' }))
+          ),
+          h('span', { className: 'dj-foot-gap' }),
+          h('button', { type: 'button', className: 'dj-link', onClick: () => setShowMore((value) => !value) }, showMore ? t('less') : t('more')),
+          externalLink(pricingUrl(lang), t('priceLink'), 'price'),
+          externalLink(USAGE_URL, t('usageLink'), 'usage')
         )
       );
     }
@@ -1106,7 +1105,7 @@ window.__ModuleLoader__.load({
   transform: translateX(-50%);
   z-index: 40;
   box-sizing: border-box;
-  width: 332px;
+  width: 310px;
   max-width: calc(100vw - 40px);
   max-height: min(68vh, 440px);
   overflow: auto;
@@ -1245,34 +1244,34 @@ window.__ModuleLoader__.load({
 .dj-seg {
   display: inline-flex;
   align-items: center;
-  padding: 2px;
+  padding: 0;
   border: 1px solid var(--dsw-alias-border-l1);
-  border-radius: 8px;
-  background: var(--dsw-alias-bg-layer-1);
+  border-radius: 6px;
+  background: transparent;
 }
 .dj-seg-btn {
-  padding: 0 7px;
+  padding: 0 6px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 5px;
   background: transparent;
   color: var(--dsw-alias-label-secondary);
   font: inherit;
   font-size: 10px;
-  line-height: 15px;
+  line-height: 14px;
   cursor: pointer;
 }
 .dj-seg-btn:hover { color: var(--dsw-alias-label-primary); }
 .dj-seg-btn--active {
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-  font-weight: 600;
+  color: var(--dsw-alias-brand-primary);
+  font-weight: 700;
 }
-@supports (color: color-mix(in srgb, red 10%, white)) {
-  .dj-seg-btn--active {
-    background: color-mix(in srgb, var(--dsw-alias-brand-primary) 16%, transparent);
-    color: var(--dsw-alias-brand-primary);
-  }
+.dj-gh-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--dsw-alias-label-secondary);
+  text-decoration: none;
 }
+.dj-gh-link:hover { color: var(--dsw-alias-label-primary); }
 .dj-ext {
   color: var(--dsw-alias-brand-primary);
   font-size: 10px;
