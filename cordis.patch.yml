@@ -1,3 +1,3 @@
 - insert:
-    - id: dsh-peak-price
-      name: '@local/dsh-peak-price'
+    - id: dsh-half-price
+      name: dsh-half-price

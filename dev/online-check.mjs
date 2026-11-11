@@ -1,5 +1,5 @@
 /**
- * Online check for @local/dsh-peak-price: exercises the real mirror list and
+ * Online check for dsh-half-price: exercises the real mirror list and
  * the holiday-cn conversion over the network.
  *
  * Run: node dev/online-check.mjs [year]

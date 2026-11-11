@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "DeepSeek Peak/Idle Price",
-    "description": "Shows below the composer whether DeepSeek API calls are billed at peak or idle rates, with a switch countdown, current price table, and holiday rules."
+    "title": "DeepSeek Half Price",
+    "description": "Shows below the composer whether DeepSeek API calls are billed at peak or half price, with the next switch, live prices, and holiday rules."
   }
 }

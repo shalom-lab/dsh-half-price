@@ -1,8 +1,10 @@
-# DeepSeek Peak & Idle Price
+# DeepSeek Half Price
 
 A small, quiet [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that answers one question, all day long:
 
 > **Am I paying full price for DeepSeek right now, or half?**
+
+`dsh-half-price` — [github.com/shalom-lab/dsh-half-price](https://github.com/shalom-lab/dsh-half-price)
 
 It renders a single chip under the composer. Hover it for the current window, the next switch, the live price table, and the holiday schedule. That is the whole plugin.
 
@@ -60,7 +62,7 @@ The plugin has no dependencies, no install scripts, and no build step, so any of
 
 | Path | What to paste | When |
 | --- | --- | --- |
-| **GitHub** (recommended) | `https://github.com/<you>/dsh-peak-price` | Normal use |
+| **GitHub** (recommended) | `https://github.com/shalom-lab/dsh-half-price` | Normal use |
 | **Tarball** | absolute path to a `.tgz` produced by `pnpm pack` | Offline / pinned version |
 | **Local directory** | absolute path to the checkout | Development |
 
@@ -130,14 +132,14 @@ In English mode holiday names keep their Chinese original — `Spring Festival �
 
 - No telemetry, no analytics, no account access.
 - The only outbound requests are the holiday sync above (at most once per 30 days, only when the cache is stale or you press Sync).
-- Local storage keys: `dsh-peak-price:holidays:v1` (cached years) and `dsh-peak-price:lang` (language override).
+- Local storage keys: `dsh-half-price:holidays:v1` (cached years) and `dsh-half-price:lang` (language override).
 
 ## Repo layout
 
 ```
 client.js              the whole plugin: data, scheduling, i18n, view, styles
 index.js               empty host half (the bundle needs a host row)
-cordis.patch.yml       bundle patch: inserts the dsh-peak-price row
+cordis.patch.yml       bundle patch: inserts the dsh-half-price row
 locale/{en,zh}.json    plugin title + description for the plugin manager
 icon.svg               plugin icon
 dev/logic-check.mjs    offline assertions: windows, holidays, dictionaries
@@ -167,13 +169,12 @@ The tuning knobs live at the top of `client.js`:
 
 ## Publishing
 
-The package is currently named `@local/dsh-peak-price` and marked `private`, because it was installed from a local directory. To publish:
+The package is `dsh-half-price`, `private: false`, with `repository`, `homepage`, and `bugs` already pointing at `shalom-lab/dsh-half-price`. Two ways to ship it:
 
-1. Pick an available name — e.g. `dsh-peak-price` or `@your-scope/dsh-peak-price` — and update `name` in `package.json`.
-2. Set `"private": false`, fill in `repository`, `homepage`, and `author`.
-3. `npm publish` (or push the repo and install from the GitHub URL instead — no registry needed).
+1. **GitHub only (recommended)** — push the repo; users install by pasting the URL into **Settings → Plugins**. No npm registry, no build, no scripts.
+2. **npm** — `npm publish`. The name is available on the public registry. GitHub install does not require this.
 
-Nothing in the code depends on the package name.
+Nothing in the code depends on the package name, so both can coexist.
 
 **Before announcing it**, add two or three real screenshots to `docs/` (one light, one dark, one with the popover open) and link them near the top. The current banner is an illustration of the chip, not a screenshot.
 

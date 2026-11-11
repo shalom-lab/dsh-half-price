@@ -9,11 +9,11 @@
  * the 10-minute warning before it), and a 1 s tick runs only while the popover
  * is open. Holiday data refreshes at most once per 30 days, from cache.
  *
- * Text goes through the shared locale service (namespace `dsh-peak-price`), so
+ * Text goes through the shared locale service (namespace `dsh-half-price`), so
  * it follows the harness language setting.
  */
 window.__ModuleLoader__.load({
-  id: '@local/dsh-peak-price',
+  id: 'dsh-half-price',
   factory(require) {
     const React = require('react');
     const h = React.createElement;
@@ -170,7 +170,7 @@ window.__ModuleLoader__.load({
      * Any failure falls back to the bundled table.
      * ------------------------------------------------------------------ */
 
-    const HOLIDAY_CACHE_KEY = 'dsh-peak-price:holidays:v1';
+    const HOLIDAY_CACHE_KEY = 'dsh-half-price:holidays:v1';
     const HOLIDAY_SYNC_DAYS = 30;
     const FETCH_TIMEOUT = 6000;
 
@@ -428,7 +428,7 @@ window.__ModuleLoader__.load({
      * locale service and falls back to Chinese if that service is absent.
      * ------------------------------------------------------------------ */
 
-    const NS = 'dsh-peak-price';
+    const NS = 'dsh-half-price';
 
     const ZH = {
       'peak': '高峰',
@@ -603,7 +603,7 @@ window.__ModuleLoader__.load({
       return ZH[key] === undefined ? key : ZH[key];
     }
 
-    const LANG_KEY = 'dsh-peak-price:lang';
+    const LANG_KEY = 'dsh-half-price:lang';
 
     function readLangOverride() {
       try {
@@ -830,7 +830,8 @@ window.__ModuleLoader__.load({
           h('span', { className: 'dj-foot-gap' }),
           h('button', { type: 'button', className: 'dj-link', onClick: () => setShowMore((value) => !value) }, showMore ? t('less') : t('more')),
           externalLink(pricingUrl(lang), t('priceLink'), 'price'),
-          externalLink(USAGE_URL, t('usageLink'), 'usage')
+          externalLink(USAGE_URL, t('usageLink'), 'usage'),
+          externalLink(GITHUB_URL, 'GitHub', 'repo')
         )
       );
     }
@@ -1229,20 +1230,20 @@ window.__ModuleLoader__.load({
 .dj-seg {
   display: inline-flex;
   align-items: center;
-  padding: 1px;
+  padding: 2px;
   border: 1px solid var(--dsw-alias-border-l1);
-  border-radius: 999px;
+  border-radius: 8px;
   background: var(--dsw-alias-bg-layer-1);
 }
 .dj-seg-btn {
-  padding: 0 6px;
+  padding: 0 7px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 6px;
   background: transparent;
   color: var(--dsw-alias-label-secondary);
   font: inherit;
-  font-size: 9.5px;
-  line-height: 14px;
+  font-size: 10px;
+  line-height: 15px;
   cursor: pointer;
 }
 .dj-seg-btn:hover { color: var(--dsw-alias-label-primary); }
@@ -1250,6 +1251,12 @@ window.__ModuleLoader__.load({
   background: var(--dsw-alias-bg-layer-2);
   color: var(--dsw-alias-label-primary);
   font-weight: 600;
+}
+@supports (color: color-mix(in srgb, red 10%, white)) {
+  .dj-seg-btn--active {
+    background: color-mix(in srgb, var(--dsw-alias-brand-primary) 16%, transparent);
+    color: var(--dsw-alias-brand-primary);
+  }
 }
 .dj-ext {
   color: var(--dsw-alias-brand-primary);
@@ -1270,6 +1277,7 @@ window.__ModuleLoader__.load({
     };
     const USAGE_URL = 'https://platform.deepseek.com/usage';
     const HOLIDAY_URL = 'https://www.gov.cn/zhengce/zhengceku/202511/content_7047091.htm';
+    const GITHUB_URL = 'https://github.com/shalom-lab/dsh-half-price';
 
     function pricingUrl(lang) {
       return lang === 'en' ? PRICING_URLS.en : PRICING_URLS.zh;

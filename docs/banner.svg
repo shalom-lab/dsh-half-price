@@ -15,8 +15,8 @@
   <circle cx="110" cy="250" r="90" fill="#e05a4e" opacity="0.06"/>
 
   <g font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
-    <text x="80" y="118" fill="#f4f7fa" font-size="46" font-weight="700">DeepSeek Peak &amp; Idle Price</text>
-    <text x="80" y="166" fill="#9fb0c0" font-size="22">One quiet chip under the composer. Peak or half price, at a glance.</text>
+    <text x="80" y="118" fill="#f4f7fa" font-size="46" font-weight="700">DeepSeek Half Price</text>
+    <text x="80" y="166" fill="#9fb0c0" font-size="22">One quiet chip under the composer. Full price or half price, at a glance.</text>
 
     <!-- idle chip -->
     <g transform="translate(80, 205)">

@@ -1,20 +1,29 @@
 {
-  "name": "@local/dsh-peak-price",
+  "name": "dsh-half-price",
   "version": "1.0.0",
-  "private": true,
-  "description": "DeepSeek peak / idle pricing indicator for the Harness composer: one quiet chip, live price table, holiday data with sync.",
+  "private": false,
+  "description": "DeepSeek peak / idle pricing chip for the Harness composer: half price or full price at a glance, live prices, holiday data with sync.",
   "keywords": [
     "dsh",
     "dsh-plugin",
     "deepseek",
     "deepseek-harness",
     "pricing",
+    "half-price",
     "peak-hours",
     "off-peak",
     "i18n"
   ],
   "license": "MIT",
-  "author": "slren",
+  "author": "shalom-lab",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shalom-lab/dsh-half-price.git"
+  },
+  "homepage": "https://github.com/shalom-lab/dsh-half-price#readme",
+  "bugs": {
+    "url": "https://github.com/shalom-lab/dsh-half-price/issues"
+  },
   "type": "module",
   "exports": {
     ".": "./index.js",

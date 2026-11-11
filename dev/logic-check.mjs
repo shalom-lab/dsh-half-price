@@ -1,5 +1,5 @@
 /**
- * Logic harness for @local/dsh-peak-price.
+ * Logic harness for dsh-half-price.
  *
  * Loads ../client.js with a stubbed `window.__ModuleLoader__` and a minimal
  * React stand-in, then asserts period classification, ranges, holiday data
