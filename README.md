@@ -23,6 +23,10 @@ It renders a single chip under the composer. Hover it for the current window, th
 
 ---
 
+![The popover in Chinese and English](docs/preview.png)
+
+<p align="center"><sub>Same popover, two languages: current window and next switch, live prices (CNY in Chinese, USD in English), and the footer with the language switch and links.</sub></p>
+
 ## Why this one
 
 The marketplace already has peak/off-peak plugins. Most of them tick: a live countdown, a pulsing dot, a floating window that follows you. Those are useful, and they are also *loud* — something moving in your peripheral vision all day.
@@ -176,7 +180,7 @@ The package is `dsh-half-price`, `private: false`, with `repository`, `homepage`
 
 Nothing in the code depends on the package name, so both can coexist.
 
-**Before announcing it**, add two or three real screenshots to `docs/` (one light, one dark, one with the popover open) and link them near the top. The current banner is an illustration of the chip, not a screenshot.
+**Before announcing it**, re-capture both screenshots after the final style pass (`docs/make-previews.py` rebuilds the side-by-side figure from two source images). The Chinese capture in the current figure predates the latest switch styling, so the two panels differ slightly.
 
 ## License
 
