@@ -12,7 +12,7 @@
  * Text goes through the shared locale service (namespace `dsh-half-price`), so
  * it follows the harness language setting.
  */
-const PLUGIN = {
+window.__ModuleLoader__.load({
   id: '@local/dsh-peak-price',
   factory(require) {
     const React = require('react');
@@ -1522,6 +1522,4 @@ const PLUGIN = {
       },
     };
   },
-};
-
-window.__ModuleLoader__.load(PLUGIN);
+});
