@@ -1508,19 +1508,28 @@ const PLUGIN = {
           order: 2,
           label: () => t('peak') + '/' + t('idle'),
         }, (props) => h(PeakPrice, { ...props, locale })));
-        ctx.slots.inject('shell.overlay', () => ctx.slots.register({
-          name: 'shell.overlay',
-          id: 'half-price-global',
-          order: 90,
-          label: () => t('idle'),
-        }, (props) => h(GlobalDot, { ...props, locale })));
+        // The frame dot is a bonus: never let it take the chip down with it.
+        try {
+          ctx.slots.inject('shell.overlay', () => ctx.slots.register({
+            name: 'shell.overlay',
+            id: 'half-price-global',
+            order: 90,
+            label: () => t('idle'),
+          }, (props) => h(GlobalDot, { ...props, locale })));
+        } catch (error) {
+          /* overlay slot unavailable in this harness build */
+        }
       },
     };
   },
 };
 
 window.__ModuleLoader__.load(PLUGIN);
-// Bridge for installs created before the package rename: the old profile row
-// still addresses `@local/dsh-peak-price`, and the same factory serves it until
-// the plugin is reinstalled under the new name.
-window.__ModuleLoader__.load({ id: '@local/dsh-peak-price', factory: PLUGIN.factory });
+// Compatibility with profile rows created before the rename: some installs
+// still address `@local/dsh-peak-price`. A loader that rejects the extra id
+// must not take the whole module down, so the call is isolated.
+try {
+  window.__ModuleLoader__.load({ id: '@local/dsh-peak-price', factory: PLUGIN.factory });
+} catch (error) {
+  /* single-id loader: the primary registration is already in place */
+}
