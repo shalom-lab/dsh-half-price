@@ -12,7 +12,7 @@
  * Text goes through the shared locale service (namespace `dsh-half-price`), so
  * it follows the harness language setting.
  */
-window.__ModuleLoader__.load({
+const PLUGIN = {
   id: 'dsh-half-price',
   factory(require) {
     const React = require('react');
@@ -1398,14 +1398,14 @@ window.__ModuleLoader__.load({
 }
 .dj-gdot {
   position: fixed;
-  right: 14px;
-  bottom: 12px;
+  right: 16px;
+  bottom: 14px;
   z-index: 46;
-  width: 9px;
-  height: 9px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
   cursor: help;
 }
 .dj-gdot--idle { color: var(--dsw-alias-state-success-primary); }
@@ -1517,4 +1517,10 @@ window.__ModuleLoader__.load({
       },
     };
   },
-});
+};
+
+window.__ModuleLoader__.load(PLUGIN);
+// Bridge for installs created before the package rename: the old profile row
+// still addresses `@local/dsh-peak-price`, and the same factory serves it until
+// the plugin is reinstalled under the new name.
+window.__ModuleLoader__.load({ id: '@local/dsh-peak-price', factory: PLUGIN.factory });
