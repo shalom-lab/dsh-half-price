@@ -466,6 +466,7 @@ window.__ModuleLoader__.load({
       'syncFail': '同步失败',
       'globalOn': '右下角状态点：开（点击关闭）',
       'globalOff': '右下角状态点：关（点击开启）',
+      'dotHint': '拖动可移动，双击复位',
       'more': '规则与假期',
       'less': '收起',
       'close': '关闭',
@@ -552,6 +553,7 @@ window.__ModuleLoader__.load({
       'syncFail': 'Sync failed',
       'globalOn': 'Frame status dot: on (click to hide)',
       'globalOff': 'Frame status dot: off (click to show)',
+      'dotHint': 'drag to move, double-click to reset',
       'more': 'Rules & holidays',
       'less': 'Collapse',
       'close': 'Close',
@@ -636,6 +638,35 @@ window.__ModuleLoader__.load({
     function subscribeGlobalDot(notify) {
       globalDotSubscribers.add(notify);
       return () => globalDotSubscribers.delete(notify);
+    }
+
+    const DOT_POS_KEY = 'dsh-half-price:dot-pos';
+
+    function readDotPos() {
+      try {
+        const raw = window.localStorage.getItem(DOT_POS_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && Number.isFinite(parsed.x) && Number.isFinite(parsed.y)) return { x: parsed.x, y: parsed.y };
+      } catch (error) {
+        /* ignore malformed positions */
+      }
+      return null;
+    }
+
+    function writeDotPos(pos) {
+      try {
+        window.localStorage.setItem(DOT_POS_KEY, JSON.stringify(pos));
+      } catch (error) {
+        /* storage unavailable: the dot just forgets its place */
+      }
+    }
+
+    function defaultDotPos() {
+      return {
+        x: Math.max(8, (window.innerWidth || 1280) - 30),
+        y: Math.max(8, (window.innerHeight || 800) - 30),
+      };
     }
 
     function readLangOverride() {
@@ -1103,8 +1134,48 @@ window.__ModuleLoader__.load({
       const locale = props.locale;
       const [on, setOn] = useState(globalDotOn);
       const [now, setNow] = useState(() => Date.now());
+      const [pos, setPos] = useState(() => readDotPos() || defaultDotPos());
+      const dragRef = useRef(null);
 
       useEffect(() => subscribeGlobalDot(setOn), []);
+
+      // Dragging is the only way to place it somewhere the slots cannot reach —
+      // e.g. next to the sidebar's section header.
+      function onPointerDown(event) {
+        event.preventDefault();
+        dragRef.current = { dx: event.clientX - pos.x, dy: event.clientY - pos.y };
+        try {
+          event.currentTarget.setPointerCapture(event.pointerId);
+        } catch (error) {
+          /* pointer capture is best-effort */
+        }
+      }
+
+      function onPointerMove(event) {
+        const drag = dragRef.current;
+        if (!drag) return;
+        setPos({
+          x: Math.max(4, Math.min((window.innerWidth || 1280) - 22, event.clientX - drag.dx)),
+          y: Math.max(4, Math.min((window.innerHeight || 800) - 22, event.clientY - drag.dy)),
+        });
+      }
+
+      function onPointerUp(event) {
+        if (!dragRef.current) return;
+        dragRef.current = null;
+        writeDotPos(pos);
+        try {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        } catch (error) {
+          /* already released */
+        }
+      }
+
+      function onDoubleClick() {
+        const next = defaultDotPos();
+        setPos(next);
+        writeDotPos(next);
+      }
 
       useEffect(() => {
         if (!on) return undefined;
@@ -1140,8 +1211,13 @@ window.__ModuleLoader__.load({
       return h('span', {
         className: 'dj-gdot ' + (bounds.peak ? 'dj-gdot--peak' : 'dj-gdot--idle'),
         role: 'status',
-        title: label,
+        title: label + ' · ' + t('dotHint'),
         'aria-label': label,
+        style: { left: pos.x + 'px', top: pos.y + 'px' },
+        onPointerDown,
+        onPointerMove,
+        onPointerUp,
+        onDoubleClick,
       });
     }
 
@@ -1398,16 +1474,27 @@ window.__ModuleLoader__.load({
 }
 .dj-gdot {
   position: fixed;
-  right: 16px;
-  bottom: 14px;
   z-index: 46;
-  width: 11px;
-  height: 11px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.dj-gdot::after {
+  content: "";
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: currentColor;
   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
-  cursor: help;
+  pointer-events: none;
 }
+.dj-gdot:active { cursor: grabbing; }
 .dj-gdot--idle { color: var(--dsw-alias-state-success-primary); }
 .dj-gdot--peak { color: var(--dsw-alias-state-error-primary); }
 @supports (color: color-mix(in srgb, red 10%, white)) {
