@@ -19,6 +19,7 @@ A quiet chip in the composer status row that tells you whether DeepSeek is billi
 - **Static chip** — `● 空闲 五折` / `● Peak`. Changes only when the billing window changes; no countdown, no animation.
 - **Popover** — current window, next switch with countdown, live price table, holidays, sync, official links.
 - **10-minute warning** — `│ 09:00 涨价` appears just before the rate changes.
+- **Frame dot** — the same signal in the window corner, visible even without an open session; toggle it next to the language switch.
 - **Quiet by design** — one timer per boundary, one holiday sync per 30 days, no telemetry.
 
 ![Where the chip lives](docs/location.png)

@@ -464,6 +464,8 @@ window.__ModuleLoader__.load({
       'syncBusy': '同步中…',
       'syncOk': '已同步',
       'syncFail': '同步失败',
+      'globalOn': '右下角状态点：开（点击关闭）',
+      'globalOff': '右下角状态点：关（点击开启）',
       'more': '规则与假期',
       'less': '收起',
       'close': '关闭',
@@ -548,6 +550,8 @@ window.__ModuleLoader__.load({
       'syncBusy': 'Syncing…',
       'syncOk': 'Synced',
       'syncFail': 'Sync failed',
+      'globalOn': 'Frame status dot: on (click to hide)',
+      'globalOff': 'Frame status dot: off (click to show)',
       'more': 'Rules & holidays',
       'less': 'Collapse',
       'close': 'Close',
@@ -604,6 +608,35 @@ window.__ModuleLoader__.load({
     }
 
     const LANG_KEY = 'dsh-half-price:lang';
+    const GLOBAL_KEY = 'dsh-half-price:global-dot';
+
+    function readGlobalDot() {
+      try {
+        return window.localStorage.getItem(GLOBAL_KEY) !== 'off';
+      } catch (error) {
+        return true;
+      }
+    }
+
+    // One module-level switch for the frame-wide dot, so the popover toggle and
+    // the overlay indicator stay in sync without a shared React tree.
+    let globalDotOn = readGlobalDot();
+    const globalDotSubscribers = new Set();
+
+    function setGlobalDot(on) {
+      globalDotOn = on;
+      try {
+        window.localStorage.setItem(GLOBAL_KEY, on ? 'on' : 'off');
+      } catch (error) {
+        /* storage unavailable: the switch still lasts this session */
+      }
+      for (const notify of globalDotSubscribers) notify(on);
+    }
+
+    function subscribeGlobalDot(notify) {
+      globalDotSubscribers.add(notify);
+      return () => globalDotSubscribers.delete(notify);
+    }
 
     function readLangOverride() {
       try {
@@ -764,7 +797,7 @@ window.__ModuleLoader__.load({
     }
 
     function Popover(props) {
-      const { bounds, desc, reason, now, onPin, onClose, sync, onSync, t, lang, onSetLang } = props;
+      const { bounds, desc, reason, now, onPin, onClose, sync, onSync, t, lang, onSetLang, globalDot, onToggleGlobal } = props;
       const [showMore, setShowMore] = useState(false);
       const cardRef = useRef(null);
       const window = bounds.peak ? 'peak' : 'idle';
@@ -830,6 +863,17 @@ window.__ModuleLoader__.load({
               },
             }, 'EN')
           ),
+          h('button', {
+            type: 'button',
+            className: 'dj-gtoggle' + (globalDot ? ' dj-gtoggle--on' : ''),
+            'aria-pressed': globalDot,
+            title: globalDot ? t('globalOn') : t('globalOff'),
+            'aria-label': globalDot ? t('globalOn') : t('globalOff'),
+            onClick: (event) => {
+              event.stopPropagation();
+              onToggleGlobal();
+            },
+          }),
           h('a', {
             className: 'dj-gh-link',
             href: GITHUB_URL,
@@ -860,6 +904,7 @@ window.__ModuleLoader__.load({
     function PeakPrice(props) {
       const locale = props.locale;
       const [langOverride, setLangOverride] = useState(() => readLangOverride());
+      const [globalDot, setGlobalDotState] = useState(globalDotOn);
       const [localeRevision, setLocaleRevision] = useState(0);
       const [now, setNow] = useState(() => Date.now());
       const [locked, setLocked] = useState(false);
@@ -926,6 +971,9 @@ window.__ModuleLoader__.load({
           setNow(Date.now());
         });
       }, []);
+
+      // Follow the frame-wide dot switch so both controls agree.
+      useEffect(() => subscribeGlobalDot(setGlobalDotState), []);
 
       // One timer at the next boundary: the chip is static in between.
       const changeAt = nextChangeOf(windowOf(now), now);
@@ -1025,6 +1073,7 @@ window.__ModuleLoader__.load({
               sync,
               t,
               lang,
+              globalDot,
               onSetLang: (next) => {
                 writeLangOverride(next);
                 setLangOverride(next);
@@ -1032,6 +1081,7 @@ window.__ModuleLoader__.load({
               onSync: () => {
                 syncHolidays();
               },
+              onToggleGlobal: () => setGlobalDot(!globalDot),
               onPin: () => {
                 if (!locked) setLocked(true);
               },
@@ -1042,6 +1092,57 @@ window.__ModuleLoader__.load({
             })
           : null
       );
+    }
+
+    /* ------------------------------------------------------------------
+     * Frame-wide status dot: the chip needs a session, this does not. It sits
+     * in `shell.overlay`, so it stays visible on panels without a composer.
+     * ------------------------------------------------------------------ */
+
+    function GlobalDot(props) {
+      const locale = props.locale;
+      const [on, setOn] = useState(globalDotOn);
+      const [now, setNow] = useState(() => Date.now());
+
+      useEffect(() => subscribeGlobalDot(setOn), []);
+
+      useEffect(() => {
+        if (!on) return undefined;
+        const changeAt = nextChangeOf(windowOf(now), now);
+        const delay = Math.max(400, changeAt - Date.now() + 700);
+        if (!Number.isFinite(delay) || delay > 25 * HOUR) return undefined;
+        const timer = setTimeout(() => setNow(Date.now()), delay);
+        return () => clearTimeout(timer);
+      }, [on, now]);
+
+      useEffect(() => {
+        function onVisibility() {
+          if (!document.hidden) setNow(Date.now());
+        }
+        document.addEventListener('visibilitychange', onVisibility);
+        return () => document.removeEventListener('visibilitychange', onVisibility);
+      }, []);
+
+      if (!on) return null;
+
+      const harness = (() => {
+        try {
+          const active = locale && typeof locale.getLocale === 'function' ? locale.getLocale().active : 'zh';
+          return String(active || 'zh').toLowerCase().startsWith('en') ? 'en' : 'zh';
+        } catch (error) {
+          return 'zh';
+        }
+      })();
+      const t = translator(readLangOverride() || harness);
+      const bounds = windowOf(now);
+      const label = (bounds.peak ? t('peakHours') : t('idleHours')) + (bounds.peak ? '' : ' · ' + t('half'));
+
+      return h('span', {
+        className: 'dj-gdot ' + (bounds.peak ? 'dj-gdot--peak' : 'dj-gdot--idle'),
+        role: 'status',
+        title: label,
+        'aria-label': label,
+      });
     }
 
     /* ------------------------------------------------------------------
@@ -1268,6 +1369,50 @@ window.__ModuleLoader__.load({
   background: var(--dsw-alias-bg-layer-2);
   color: var(--dsw-alias-label-primary);
 }
+.dj-gtoggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.dj-gtoggle::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--dsw-alias-label-secondary);
+}
+.dj-gtoggle--on {
+  color: var(--dsw-alias-state-success-primary);
+  border-color: var(--dsw-alias-state-success-primary);
+}
+.dj-gtoggle--on::after {
+  border: 0;
+  background: currentColor;
+}
+.dj-gdot {
+  position: fixed;
+  right: 14px;
+  bottom: 12px;
+  z-index: 46;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  cursor: help;
+}
+.dj-gdot--idle { color: var(--dsw-alias-state-success-primary); }
+.dj-gdot--peak { color: var(--dsw-alias-state-error-primary); }
+@supports (color: color-mix(in srgb, red 10%, white)) {
+  .dj-gdot { box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 20%, transparent); }
+}
 @supports (color: color-mix(in srgb, red 10%, white)) {
   .dj-seg-btn--active {
     background: color-mix(in srgb, var(--dsw-alias-brand-primary) 18%, var(--dsw-alias-bg-overlay));
@@ -1363,6 +1508,12 @@ window.__ModuleLoader__.load({
           order: 2,
           label: () => t('peak') + '/' + t('idle'),
         }, (props) => h(PeakPrice, { ...props, locale })));
+        ctx.slots.inject('shell.overlay', () => ctx.slots.register({
+          name: 'shell.overlay',
+          id: 'half-price-global',
+          order: 90,
+          label: () => t('idle'),
+        }, (props) => h(GlobalDot, { ...props, locale })));
       },
     };
   },
