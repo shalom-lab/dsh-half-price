@@ -1,7 +1,7 @@
 {
-  "name": "dsh-half-price",
+  "name": "@local/dsh-peak-price",
   "version": "1.0.0",
-  "private": false,
+  "private": true,
   "description": "DeepSeek peak / idle pricing chip for the Harness composer: half price or full price at a glance, live prices, holiday data with sync.",
   "keywords": [
     "dsh",

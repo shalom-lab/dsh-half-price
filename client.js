@@ -13,7 +13,7 @@
  * it follows the harness language setting.
  */
 const PLUGIN = {
-  id: 'dsh-half-price',
+  id: '@local/dsh-peak-price',
   factory(require) {
     const React = require('react');
     const h = React.createElement;
@@ -1525,11 +1525,3 @@ const PLUGIN = {
 };
 
 window.__ModuleLoader__.load(PLUGIN);
-// Compatibility with profile rows created before the rename: some installs
-// still address `@local/dsh-peak-price`. A loader that rejects the extra id
-// must not take the whole module down, so the call is isolated.
-try {
-  window.__ModuleLoader__.load({ id: '@local/dsh-peak-price', factory: PLUGIN.factory });
-} catch (error) {
-  /* single-id loader: the primary registration is already in place */
-}
