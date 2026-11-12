@@ -1218,7 +1218,10 @@ window.__ModuleLoader__.load({
         onPointerMove,
         onPointerUp,
         onDoubleClick,
-      });
+      },
+        h('svg', { viewBox: '0 0 12 12', width: 12, height: 12, 'aria-hidden': 'true' },
+          h('circle', { cx: 6, cy: 6, r: 6, fill: 'currentColor' }))
+      );
     }
 
     /* ------------------------------------------------------------------
@@ -1475,31 +1478,25 @@ window.__ModuleLoader__.load({
 .dj-gdot {
   position: fixed;
   z-index: 46;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  box-shadow: none;
   cursor: grab;
   touch-action: none;
   user-select: none;
 }
-.dj-gdot::after {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
-  pointer-events: none;
-}
+.dj-gdot svg { display: block; }
 .dj-gdot:active { cursor: grabbing; }
 .dj-gdot--idle { color: var(--dsw-alias-state-success-primary); }
 .dj-gdot--peak { color: var(--dsw-alias-state-error-primary); }
-@supports (color: color-mix(in srgb, red 10%, white)) {
-  .dj-gdot { box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 20%, transparent); }
-}
 @supports (color: color-mix(in srgb, red 10%, white)) {
   .dj-seg-btn--active {
     background: color-mix(in srgb, var(--dsw-alias-brand-primary) 18%, var(--dsw-alias-bg-overlay));
