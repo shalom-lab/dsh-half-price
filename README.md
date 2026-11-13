@@ -50,7 +50,7 @@ Hand this to an agent:
 
 ```text
 Install this DeepSeek Harness plugin for me: https://github.com/shalom-lab/dsh-half-price
-Use the plugin manager, confirm the dsh-half-price row is active, and tell me if a restart is needed.
+Use the plugin manager, confirm the new plugin row is active, and tell me if a restart is needed.
 ```
 
 Or paste the GitHub URL into **Settings → Plugins**, then **restart the harness** — client modules are cached by id.
