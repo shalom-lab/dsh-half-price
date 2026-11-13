@@ -458,8 +458,8 @@ window.__ModuleLoader__.load({
       'holidayNone': '表内年份的假期已全部结束',
       'holidayNote': '未收录的年份按工作日/周末推算；可手动同步。',
       'holidayLink': '假期安排原文',
-      'priceLink': '官方价格页',
-      'usageLink': '用量查询',
+      'priceLink': '价格',
+      'usageLink': '用量',
       'sync': '同步',
       'syncBusy': '同步中…',
       'syncOk': '已同步',
@@ -467,7 +467,7 @@ window.__ModuleLoader__.load({
       'globalOn': '右下角状态点：开（点击关闭）',
       'globalOff': '右下角状态点：关（点击开启）',
       'dotHint': '拖动可移动，双击复位',
-      'more': '规则与假期',
+      'more': '规则',
       'less': '收起',
       'close': '关闭',
       'nextSwitch': '下次切换',
@@ -545,7 +545,7 @@ window.__ModuleLoader__.load({
       'holidayNone': 'No holidays left in the covered years',
       'holidayNote': 'Years not covered fall back to weekdays/weekends; sync to refresh.',
       'holidayLink': 'Official notice',
-      'priceLink': 'Pricing page',
+      'priceLink': 'Price',
       'usageLink': 'Usage',
       'sync': 'Sync',
       'syncBusy': 'Syncing…',
@@ -554,7 +554,7 @@ window.__ModuleLoader__.load({
       'globalOn': 'Frame status dot: on (click to hide)',
       'globalOff': 'Frame status dot: off (click to show)',
       'dotHint': 'drag to move, double-click to reset',
-      'more': 'Rules & holidays',
+      'more': 'Rules',
       'less': 'Collapse',
       'close': 'Close',
       'nextSwitch': 'Next switch',
@@ -1402,13 +1402,14 @@ window.__ModuleLoader__.load({
 .dj-card-foot {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 2px 8px;
   margin-top: 9px;
   padding-top: 7px;
   border-top: 1px solid var(--dsw-alias-border-l1);
   font-size: 10px;
   color: var(--dsw-alias-label-secondary);
+  white-space: nowrap;
 }
 .dj-foot-gap { flex: 1; }
 .dj-link {
