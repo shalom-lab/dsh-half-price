@@ -640,14 +640,20 @@ window.__ModuleLoader__.load({
       return () => globalDotSubscribers.delete(notify);
     }
 
-    const DOT_POS_KEY = 'dsh-half-price:dot-pos';
+    // Position is stored as viewport percentages, so the dot keeps its place
+    // relative to the layout when the window is resized or goes fullscreen.
+    const DOT_POS_KEY = 'dsh-half-price:dot-pos-pct';
 
     function readDotPos() {
       try {
         const raw = window.localStorage.getItem(DOT_POS_KEY);
         if (!raw) return null;
         const parsed = JSON.parse(raw);
-        if (parsed && Number.isFinite(parsed.x) && Number.isFinite(parsed.y)) return { x: parsed.x, y: parsed.y };
+        if (!parsed) return null;
+        const { x, y } = parsed;
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+        if (x < 0 || x > 100 || y < 0 || y > 100) return null;
+        return { x, y };
       } catch (error) {
         /* ignore malformed positions */
       }
@@ -656,17 +662,17 @@ window.__ModuleLoader__.load({
 
     function writeDotPos(pos) {
       try {
-        window.localStorage.setItem(DOT_POS_KEY, JSON.stringify(pos));
+        window.localStorage.setItem(DOT_POS_KEY, JSON.stringify({
+          x: Math.round(pos.x * 100) / 100,
+          y: Math.round(pos.y * 100) / 100,
+        }));
       } catch (error) {
         /* storage unavailable: the dot just forgets its place */
       }
     }
 
     function defaultDotPos() {
-      return {
-        x: Math.max(8, (window.innerWidth || 1280) - 30),
-        y: Math.max(8, (window.innerHeight || 800) - 30),
-      };
+      return { x: 97.5, y: 96.5 };
     }
 
     function readLangOverride() {
@@ -1140,10 +1146,15 @@ window.__ModuleLoader__.load({
       useEffect(() => subscribeGlobalDot(setOn), []);
 
       // Dragging is the only way to place it somewhere the slots cannot reach —
-      // e.g. next to the sidebar's section header.
+      // e.g. next to the sidebar's section header. The stored value is a
+      // percentage, so the dot scales with the window instead of drifting.
       function onPointerDown(event) {
         event.preventDefault();
-        dragRef.current = { dx: event.clientX - pos.x, dy: event.clientY - pos.y };
+        const rect = event.currentTarget.getBoundingClientRect();
+        dragRef.current = {
+          dx: event.clientX - (rect.left + rect.width / 2),
+          dy: event.clientY - (rect.top + rect.height / 2),
+        };
         try {
           event.currentTarget.setPointerCapture(event.pointerId);
         } catch (error) {
@@ -1154,10 +1165,11 @@ window.__ModuleLoader__.load({
       function onPointerMove(event) {
         const drag = dragRef.current;
         if (!drag) return;
-        setPos({
-          x: Math.max(4, Math.min((window.innerWidth || 1280) - 22, event.clientX - drag.dx)),
-          y: Math.max(4, Math.min((window.innerHeight || 800) - 22, event.clientY - drag.dy)),
-        });
+        const width = window.innerWidth || 1280;
+        const height = window.innerHeight || 800;
+        const cx = Math.max(8, Math.min(width - 8, event.clientX - drag.dx));
+        const cy = Math.max(8, Math.min(height - 8, event.clientY - drag.dy));
+        setPos({ x: (cx / width) * 100, y: (cy / height) * 100 });
       }
 
       function onPointerUp(event) {
@@ -1213,7 +1225,7 @@ window.__ModuleLoader__.load({
         role: 'status',
         title: label + ' · ' + t('dotHint'),
         'aria-label': label,
-        style: { left: pos.x + 'px', top: pos.y + 'px' },
+        style: { left: pos.x + '%', top: pos.y + '%', transform: 'translate(-50%, -50%)' },
         onPointerDown,
         onPointerMove,
         onPointerUp,
